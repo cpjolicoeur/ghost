@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/handlers"
 )
 
-const AppVersion = "0.2.0"
+const AppVersion = "1.0.0"
 
 func main() {
 	app := cli.NewApp()
@@ -24,13 +24,21 @@ func main() {
 			Usage:  "port ghost will serve on",
 			EnvVar: "GHOST_PORT,PORT",
 		},
+		cli.StringFlag{
+			Name:   "dir",
+			Value:  ".",
+			Usage:  "directory for ghost to serve files from",
+			EnvVar: "GHOST_DIR",
+		},
 	}
 	app.Action = func(c *cli.Context) {
-		fs := http.FileServer(http.Dir("."))
+		siteDir := c.String("dir")
+
+		fs := http.FileServer(http.Dir(siteDir))
 		http.Handle("/", handlers.LoggingHandler(os.Stdout, fs))
 
 		port := c.Int("port")
-		fmt.Printf("Starting ghost - http://localhost:%d\n", port)
+		fmt.Printf("Starting ghost from %s - http://localhost:%d\n", siteDir, port)
 		log.Fatalln(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 	}
 	app.Run(os.Args)
