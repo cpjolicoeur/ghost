@@ -5,4 +5,15 @@
 
 ### Installation
 
-    go get github.com/cpjolicoeur/ghost
+    $ go get github.com/cpjolicoeur/ghost
+
+
+### Usage
+
+    $ ghost
+    
+`ghost` defaults to running on port 8000, but the port can be configured a few different ways.
+
+    $ ghost --port 1234
+    $ PORT=1234 ghost
+    $ GHOST_PORT=1234 ghost
